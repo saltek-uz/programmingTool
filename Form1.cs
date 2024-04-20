@@ -1,18 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.IO.Ports;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace programmingTool
 {
@@ -39,15 +30,15 @@ namespace programmingTool
 
         void onReceive(object sender, SerialDataReceivedEventArgs e)
         {
-           if (sp.BytesToRead < 2) return;
+            if (sp.BytesToRead < 2) return;
 
-           string ss = sp.ReadExisting();
-            
-           if (ss == "OK")  {ss = " Усшешно ! \r\n "; OKreceived = true; }
+            string ss = sp.ReadExisting();
+
+            if (ss == "OK") { ss = " Усшешно ! \r\n "; OKreceived = true; }
             if (ss == "ER") { ss = " Ошибка ! \r\n "; OKreceived = false; }
-        
 
-        //textBox1.Invoke(new Action(() => {textBox1.Text += ss;})); 
+
+            //textBox1.Invoke(new Action(() => {textBox1.Text += ss;})); 
 
 
 
@@ -58,7 +49,7 @@ namespace programmingTool
         {
             string[] ports = SerialPort.GetPortNames();
             comboBox1.Items.AddRange(ports);
-            if (comboBox1.Items.Count > 0) { comboBox1.SelectedIndex = 0;};
+            if (comboBox1.Items.Count > 0) { comboBox1.SelectedIndex = 0; };
         }
 
 
@@ -72,7 +63,7 @@ namespace programmingTool
                 TmpCRC = TmpCRC ^ bufData[i];
                 for (j = 0; j < 8; j++)
                 {
-                    if ( (TmpCRC & 0x0001) != 0 ) { TmpCRC >>= 1; TmpCRC ^= POLYNOMIAL; }
+                    if ((TmpCRC & 0x0001) != 0) { TmpCRC >>= 1; TmpCRC ^= POLYNOMIAL; }
                     else TmpCRC >>= 1;
                 }
             }
@@ -100,7 +91,7 @@ namespace programmingTool
             Thread.Sleep(500);
 
             if (OKreceived) textBox1.Text += " Усшешно ! \r\n ";
-             else textBox1.Text += " Ошибка ! \r\n ";
+            else textBox1.Text += " Ошибка ! \r\n ";
 
 
 
@@ -140,7 +131,7 @@ namespace programmingTool
 
             OKreceived = false;
             write_1C00();
-            textBox1.Text += "1C00 line Unlocked..."; 
+            textBox1.Text += "1C00 line Unlocked...";
             Thread.Sleep(500);
             if (OKreceived) textBox1.Text += " Усшешно ! \r\n ";
             else { textBox1.Text += " Ошибка ! \r\n "; return; };
@@ -216,30 +207,30 @@ namespace programmingTool
                 "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
         };
 
-         textBox1.Text += "Обновление загрузчика . ";
+            textBox1.Text += "Обновление загрузчика . ";
 
-            for (int i = 0; i <16;i++) 
+            for (int i = 0; i < 16; i++)
             {
-                int adr = 0x2000 + i*0x200;
+                int adr = 0x2000 + i * 0x200;
 
                 string tmp = bltr[i];
                 string[] tts = tmp.Split(' ');
                 byte[] tt = new byte[64];
                 for (int j = 0; j < 64; j++)
-                  tt[j] = byte.Parse(tts[j].Trim(), NumberStyles.HexNumber);
+                    tt[j] = byte.Parse(tts[j].Trim(), NumberStyles.HexNumber);
 
                 OKreceived = false;
                 writePage(tt, adr);
                 textBox1.Text += " . ";
                 Thread.Sleep(200);
-                if (OKreceived ==  false) { tp = false; break; };
-                
+                if (OKreceived == false) { tp = false; break; };
+
             }
 
             textBox1.Text += "\r\n";
-        return tp;
+            return tp;
 
-}
+        }
 
 
         void write_1C00()
@@ -252,11 +243,11 @@ namespace programmingTool
                     00 15 B2 40 02 A5 28 01 CF 43 00 00 30 41 
             */
 
-            byte[] tt = 
+            byte[] tt =
                 {
-                    0xB2, 0x40, 0x88, 0x5A, 0x20, 0x01, 0xB2, 0x40, 0x82, 0xA5, 0x2A, 0x01, 0xB2, 0x40, 0x00, 0xA5, 
-                    0x2C, 0x01, 0x3F, 0x40, 0x00, 0x11, 0xB2, 0x40, 0x02, 0xA5, 0x28, 0x01, 0xCF, 0x43, 0x00, 0x00, 
-                    0x3F, 0x40, 0x00, 0x13, 0xB2, 0x40, 0x02, 0xA5, 0x28, 0x01, 0xCF, 0x43, 0x00, 0x00, 0x3F, 0x40, 
+                    0xB2, 0x40, 0x88, 0x5A, 0x20, 0x01, 0xB2, 0x40, 0x82, 0xA5, 0x2A, 0x01, 0xB2, 0x40, 0x00, 0xA5,
+                    0x2C, 0x01, 0x3F, 0x40, 0x00, 0x11, 0xB2, 0x40, 0x02, 0xA5, 0x28, 0x01, 0xCF, 0x43, 0x00, 0x00,
+                    0x3F, 0x40, 0x00, 0x13, 0xB2, 0x40, 0x02, 0xA5, 0x28, 0x01, 0xCF, 0x43, 0x00, 0x00, 0x3F, 0x40,
                     0x00, 0x15, 0xB2, 0x40, 0x02, 0xA5, 0x28, 0x01, 0xCF, 0x43, 0x00, 0x00, 0x30, 0x41, 0x00, 0x00
                 };
             writePage(tt, 0x1C00);
@@ -313,7 +304,7 @@ namespace programmingTool
             if (!sp.IsOpen) sp.Open();
             button1.Enabled = false;
             comboBox1.Enabled = false;
-            
+
         }
 
         private void button4_Click(object sender, EventArgs e)
@@ -328,7 +319,7 @@ namespace programmingTool
 
             button5.Enabled = false;
 
-            try 
+            try
             {
                 textBox1.Text += "Открываем файл обновления : " + openFileDialog1.FileName + "\r\n";
 
@@ -342,7 +333,7 @@ namespace programmingTool
 
                     int crAdr = 0x1100;
                     foreach (string s in fileContent)
-                    { 
+                    {
                         string ss = s.Trim();
                         if (ss[0] == '@')
                         {
@@ -350,15 +341,15 @@ namespace programmingTool
                             crAdr = int.Parse(ss, NumberStyles.HexNumber);
                         }
                         else
-                            {
+                        {
                             if (ss[0] == 'q') break;
-                                string[] tmp = ss.Split();
-                                foreach (string hx in tmp) 
-                                    {
-                                        string hh=hx.Trim();
-                                        fWare[crAdr++] = byte.Parse(hh, NumberStyles.HexNumber);
-                                    }
+                            string[] tmp = ss.Split();
+                            foreach (string hx in tmp)
+                            {
+                                string hh = hx.Trim();
+                                fWare[crAdr++] = byte.Parse(hh, NumberStyles.HexNumber);
                             }
+                        }
                     }
                 }
 
@@ -368,7 +359,7 @@ namespace programmingTool
 
             catch
             {
-                MessageBox.Show( "ошибка открытия файла!");
+                MessageBox.Show("ошибка открытия файла!");
             };
 
 
